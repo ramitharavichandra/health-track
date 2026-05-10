@@ -1,6 +1,7 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LayoutDashboard, PlusCircle, History, Target, User, LogOut, Activity } from 'lucide-react';
+import NotificationReminder from './NotificationReminder';
 import styles from './Layout.module.css';
 
 const navItems = [
@@ -44,9 +45,12 @@ export default function Layout() {
               <div className={styles.userEmail}>{user?.email}</div>
             </div>
           </div>
-          <button onClick={handleLogout} className={styles.logoutBtn}>
-            <LogOut size={18} /> Logout
-          </button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <button onClick={handleLogout} className={styles.logoutBtn}>
+              <LogOut size={18} /> Logout
+            </button>
+            <NotificationReminder />
+          </div>
         </div>
       </aside>
       <main className={styles.main}>

@@ -1,4 +1,4 @@
-.page { max-width: 700px; }
+.page { max-width: 720px; }
 
 .header { margin-bottom: 28px; }
 .header h2 { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
@@ -14,15 +14,13 @@
   gap: 24px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
 .section { display: flex; flex-direction: column; gap: 10px; }
 
-.sectionLabel { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.sectionLabel { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+
+.sectionHeader { display: flex; justify-content: space-between; align-items: center; }
 
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field label { font-size: 13px; font-weight: 500; color: var(--text-muted); }
@@ -40,102 +38,103 @@
   outline: none;
   transition: border-color 0.2s;
 }
-
 .inputWrap input:focus { border-color: var(--primary); }
 
 .unit {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 12px;
-  color: var(--text-muted);
-  pointer-events: none;
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 12px; color: var(--text-muted); pointer-events: none;
 }
 
 .dateInput {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: var(--text);
-  font-size: 14px;
-  outline: none;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; color: var(--text); font-size: 14px; outline: none;
   transition: border-color 0.2s;
 }
 .dateInput:focus { border-color: var(--primary); }
 
-.moodGrid {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+/* Water quick buttons */
+.waterRow { display: flex; gap: 10px; align-items: center; }
+
+.quickBtns { display: flex; gap: 6px; flex-shrink: 0; }
+
+.quickBtn {
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #06b6d4;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+  white-space: nowrap;
 }
+.quickBtn:hover { background: rgba(6, 182, 212, 0.2); }
+
+/* Total row */
+.totalRow {
+  font-size: 13px; color: var(--text-muted);
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 8px 12px; border-radius: 8px;
+}
+.totalRow strong { color: var(--text); }
+
+/* Exercise */
+.addBtn {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3);
+  color: var(--primary-light); padding: 6px 12px; border-radius: 8px;
+  font-size: 12px; font-weight: 600; transition: all 0.2s;
+}
+.addBtn:hover { background: rgba(99,102,241,0.2); }
+
+.emptyExercise {
+  font-size: 13px; color: var(--text-muted); text-align: center;
+  padding: 16px; border: 1px dashed var(--border); border-radius: 8px;
+}
+
+.exerciseRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.exSelect {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; color: var(--text); font-size: 14px; outline: none;
+  transition: border-color 0.2s; width: 100%;
+}
+.exSelect:focus { border-color: var(--primary); }
+
+.removeBtn {
+  background: transparent; color: var(--danger); padding: 8px;
+  border-radius: 8px; transition: background 0.2s; display: flex; align-items: center;
+}
+.removeBtn:hover { background: rgba(239,68,68,0.1); }
+
+/* Mood */
+.moodGrid { display: flex; gap: 10px; flex-wrap: wrap; }
 
 .moodBtn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  font-size: 12px;
-  transition: all 0.2s;
-  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 16px; border-radius: 8px; background: var(--bg);
+  border: 1px solid var(--border); color: var(--text-muted); font-size: 12px;
+  transition: all 0.2s; cursor: pointer;
 }
-
 .moodBtn:hover { border-color: var(--primary); color: var(--text); }
-
-.moodActive {
-  border-color: var(--primary) !important;
-  background: rgba(99, 102, 241, 0.15) !important;
-  color: var(--primary-light) !important;
-}
-
+.moodActive { border-color: var(--primary) !important; background: rgba(99,102,241,0.15) !important; color: var(--primary-light) !important; }
 .moodEmoji { font-size: 22px; }
 
 .textarea {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: var(--text);
-  font-size: 14px;
-  outline: none;
-  resize: vertical;
-  width: 100%;
-  transition: border-color 0.2s;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; color: var(--text); font-size: 14px; outline: none;
+  resize: vertical; width: 100%; transition: border-color 0.2s;
 }
 .textarea:focus { border-color: var(--primary); }
 
-.btn {
-  background: var(--primary);
-  color: white;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  transition: background 0.2s;
-}
+.btn { background: var(--primary); color: white; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 600; transition: background 0.2s; }
 .btn:hover:not(:disabled) { background: var(--primary-dark); }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.success {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #6ee7b7;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-}
-
-.error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-}
+.success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; padding: 10px 14px; border-radius: 8px; font-size: 13px; }
+.error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; padding: 10px 14px; border-radius: 8px; font-size: 13px; }

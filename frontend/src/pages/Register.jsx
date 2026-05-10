@@ -14,6 +14,9 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (form.age && Number(form.age) < 1) return setError('Age must be at least 1');
+    if (form.weight && Number(form.weight) <= 0) return setError('Weight must be positive');
+    if (form.height && Number(form.height) <= 0) return setError('Height must be positive');
     setLoading(true);
     try {
       await register({ ...form, age: Number(form.age) || undefined, weight: Number(form.weight) || undefined, height: Number(form.height) || undefined });
@@ -25,10 +28,19 @@ export default function Register() {
     }
   };
 
+  const minFor = { age: 1, weight: 0.1, height: 1 };
+
   const field = (key, label, type = 'text', placeholder = '') => (
     <div className={styles.field}>
       <label>{label}</label>
-      <input type={type} value={form[key]} onChange={e => setForm({ ...form, [key]: e.target.value })} placeholder={placeholder} required={['name','email','password'].includes(key)} />
+      <input
+        type={type}
+        value={form[key]}
+        onChange={e => setForm({ ...form, [key]: e.target.value })}
+        placeholder={placeholder}
+        required={['name','email','password'].includes(key)}
+        min={type === 'number' ? (minFor[key] ?? 0) : undefined}
+      />
     </div>
   );
 

@@ -8,16 +8,15 @@ router.use(protect);
 // Log or update today's metric
 router.post('/', async (req, res) => {
   try {
-    const { date, steps, waterLiters, caloriesBurned, caloriesConsumed, sleepHours, weight, mood, notes } = req.body;
+    const { date, steps, waterLiters, caloriesBurned, caloriesConsumed, sleepHours, weight, mood, notes, breakfastCal, lunchCal, dinnerCal, snackCal, exercises } = req.body;
+    const fields = { steps, waterLiters, caloriesBurned, caloriesConsumed, sleepHours, weight, mood, notes, breakfastCal, lunchCal, dinnerCal, snackCal, exercises };
     const existing = await Metric.findOne({ user: req.user._id, date });
     if (existing) {
-      Object.assign(existing, { steps, waterLiters, caloriesBurned, caloriesConsumed, sleepHours, weight, mood, notes });
+      Object.assign(existing, fields);
       await existing.save();
       return res.json(existing);
     }
-    const metric = await Metric.create({
-      user: req.user._id, date, steps, waterLiters, caloriesBurned, caloriesConsumed, sleepHours, weight, mood, notes
-    });
+    const metric = await Metric.create({ user: req.user._id, date, ...fields });
     res.status(201).json(metric);
   } catch (err) {
     res.status(400).json({ message: err.message });

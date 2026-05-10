@@ -11,6 +11,17 @@ const metricSchema = new mongoose.Schema({
   weight: { type: Number },
   mood: { type: String, enum: ['great', 'good', 'okay', 'bad', 'terrible'], default: 'good' },
   notes: { type: String, maxlength: 500 },
+  // Meal breakdown
+  breakfastCal: { type: Number, default: 0 },
+  lunchCal: { type: Number, default: 0 },
+  dinnerCal: { type: Number, default: 0 },
+  snackCal: { type: Number, default: 0 },
+  // Exercise log
+  exercises: [{
+    name: { type: String },
+    duration: { type: Number },
+    calories: { type: Number },
+  }],
 }, { timestamps: true });
 
 metricSchema.index({ user: 1, date: -1 });

@@ -1,0 +1,50 @@
+.bellBtn {
+  background: transparent; border: none; cursor: pointer;
+  padding: 6px; border-radius: 8px; transition: background 0.2s;
+  display: flex; align-items: center;
+}
+.bellBtn:hover { background: var(--bg-card2); }
+
+.panel {
+  position: fixed; bottom: 24px; right: 24px; z-index: 200;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px; width: 240px;
+  box-shadow: var(--shadow);
+}
+
+.panelHeader {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 12px;
+}
+
+.closeBtn { background: transparent; color: var(--text-muted); padding: 2px; border-radius: 4px; }
+.closeBtn:hover { color: var(--text); }
+
+.body { display: flex; flex-direction: column; gap: 10px; }
+.body p { font-size: 12px; color: var(--text-muted); }
+
+.enableBtn {
+  background: var(--primary); color: white; padding: 8px 12px;
+  border-radius: 8px; font-size: 13px; font-weight: 600;
+}
+.enableBtn:hover { background: var(--primary-dark); }
+
+.timeRow { display: flex; gap: 8px; align-items: center; }
+
+.timeInput {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 10px; color: var(--text); font-size: 13px; outline: none;
+}
+.timeInput:focus { border-color: var(--primary); }
+
+.saveBtn {
+  background: var(--success); color: white; padding: 7px 12px;
+  border-radius: 8px; font-size: 12px; font-weight: 600; white-space: nowrap;
+}
+
+.disableBtn {
+  display: flex; align-items: center; gap: 5px;
+  background: transparent; color: var(--text-muted); font-size: 12px;
+  padding: 4px 0;
+}
+.disableBtn:hover { color: var(--danger); }
