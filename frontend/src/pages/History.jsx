@@ -20,7 +20,7 @@ function exportCSV(metrics) {
   a.href = url;
   a.download = `health-history-${new Date().toISOString().split('T')[0]}.csv`;
   a.click();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 100);
 }
 
 export default function History() {

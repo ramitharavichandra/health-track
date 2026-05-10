@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
-import { Footprints, Droplets, Flame, Moon, Weight, TrendingUp, Zap } from 'lucide-react';
+import { Footprints, Droplets, Flame, Moon, Weight, TrendingUp, Zap, Sparkles, RefreshCw } from 'lucide-react';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, BarChart, Bar } from 'recharts';
 import styles from './Dashboard.module.css';
 
 const today = new Date().toISOString().split('T')[0];
+const chartTooltipStyle = { background: '#1e293b', border: '1px solid #334155', borderRadius: 8 };
 
 function StatCard({ icon: Icon, label, value, unit, goal, color }) {
   const pct = goal ? Math.min(100, Math.round((value / goal) * 100)) : null;
@@ -62,6 +63,9 @@ export default function Dashboard() {
   const [history, setHistory] = useState([]);
   const [goals, setGoals] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [aiInsights, setAiInsights] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState('');
 
   useEffect(() => {
     Promise.all([
@@ -78,7 +82,19 @@ export default function Dashboard() {
       })));
       setGoals(goalsRes.data);
     }).finally(() => setLoading(false));
-  }, [user]);
+  }, [user?._id]);
+
+  const fetchInsights = async () => {
+    setAiLoading(true); setAiError('');
+    try {
+      const { data } = await api.get('/ai/insights');
+      setAiInsights(data);
+    } catch (err) {
+      setAiError(err.response?.data?.message || 'Failed to load insights.');
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   if (loading) return <div className={styles.loading}>Loading dashboard...</div>;
 
@@ -148,7 +164,7 @@ export default function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                 <XAxis dataKey="dateLabel" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                 <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8 }} />
+                <Tooltip contentStyle={chartTooltipStyle} />
                 <Bar dataKey="steps" fill="#6366f1" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -161,7 +177,7 @@ export default function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                 <XAxis dataKey="dateLabel" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                 <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8 }} />
+                <Tooltip contentStyle={chartTooltipStyle} />
                 <Line type="monotone" dataKey="sleepHours" stroke="#8b5cf6" strokeWidth={2} dot={false} name="Sleep (hrs)" />
                 <Line type="monotone" dataKey="waterLiters" stroke="#06b6d4" strokeWidth={2} dot={false} name="Water (L)" />
               </LineChart>
@@ -176,7 +192,7 @@ export default function Dashboard() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                   <XAxis dataKey="dateLabel" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                   <YAxis domain={['auto', 'auto']} tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                  <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8 }} formatter={(v) => [v, 'BMI']} />
+                  <Tooltip contentStyle={chartTooltipStyle} formatter={(v) => [v, 'BMI']} />
                   <Line type="monotone" dataKey="bmi" stroke="#10b981" strokeWidth={2} dot={{ r: 4, fill: '#10b981' }} name="BMI" />
                 </LineChart>
               </ResponsiveContainer>
@@ -184,6 +200,37 @@ export default function Dashboard() {
           )}
         </div>
       )}
+
+      {/* AI Insights */}
+      <div className={styles.aiCard}>
+        <div className={styles.aiHeader}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Sparkles size={18} color="#a78bfa" />
+            <span className={styles.aiTitle}>AI Health Insights</span>
+          </div>
+          <button className={styles.aiBtn} onClick={fetchInsights} disabled={aiLoading}>
+            <RefreshCw size={14} className={aiLoading ? styles.spinning : ''} />
+            {aiLoading ? 'Analyzing...' : 'Analyze my data'}
+          </button>
+        </div>
+        {aiError && <p className={styles.aiError}>{aiError}</p>}
+        {aiInsights && (
+          <div className={styles.aiBody}>
+            <p className={styles.aiOverall}>{aiInsights.overall}</p>
+            <div className={styles.aiInsights}>
+              {aiInsights.insights?.map((ins, i) => (
+                <div key={i} className={`${styles.aiInsight} ${styles[ins.type]}`}>
+                  <div className={styles.aiInsightTitle}>{ins.title}</div>
+                  <div className={styles.aiInsightDetail}>{ins.detail}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {!aiInsights && !aiError && !aiLoading && (
+          <p className={styles.aiHint}>Click "Analyze my data" to get personalized health insights powered by Claude AI.</p>
+        )}
+      </div>
 
       {!todayData && (
         <div className={styles.noData}>

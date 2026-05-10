@@ -8,6 +8,7 @@ const moodOptions = ['great', 'good', 'okay', 'bad', 'terrible'];
 const moodEmoji = { great: '😄', good: '🙂', okay: '😐', bad: '😔', terrible: '😢' };
 
 const EXERCISE_TYPES = ['Running', 'Walking', 'Cycling', 'Swimming', 'Gym', 'Yoga', 'HIIT', 'Other'];
+const sumCalories = (exs) => exs.reduce((s, ex) => s + (parseFloat(ex.calories) || 0), 0);
 
 const emptyForm = {
   date: today,
@@ -47,7 +48,6 @@ export default function LogMetric() {
     set('waterLiters', (current + amount).toFixed(2));
   };
 
-  // Auto-sum meals into caloriesConsumed
   const updateMeal = (key, val) => {
     const updated = { ...form, [key]: val };
     const total = ['breakfastCal', 'lunchCal', 'dinnerCal', 'snackCal']
@@ -62,15 +62,13 @@ export default function LogMetric() {
     setForm(prev => {
       const exercises = [...prev.exercises];
       exercises[i] = { ...exercises[i], [field]: val };
-      const totalCalories = exercises.reduce((sum, ex) => sum + (parseFloat(ex.calories) || 0), 0);
-      return { ...prev, exercises, caloriesBurned: totalCalories || '' };
+      return { ...prev, exercises, caloriesBurned: sumCalories(exercises) || '' };
     });
 
   const removeExercise = (i) =>
     setForm(prev => {
       const exercises = prev.exercises.filter((_, idx) => idx !== i);
-      const totalCalories = exercises.reduce((sum, ex) => sum + (parseFloat(ex.calories) || 0), 0);
-      return { ...prev, exercises, caloriesBurned: totalCalories || '' };
+      return { ...prev, exercises, caloriesBurned: sumCalories(exercises) || '' };
     });
 
   const handleSubmit = async (e) => {
@@ -117,13 +115,11 @@ export default function LogMetric() {
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
-        {/* Date */}
         <div className={styles.section}>
           <label className={styles.sectionLabel}>Date</label>
           <input type="date" value={form.date} onChange={e => set('date', e.target.value)} className={styles.dateInput} max={today} />
         </div>
 
-        {/* Basic metrics */}
         <div className={styles.section}>
           <label className={styles.sectionLabel}>Activity & Body</label>
           <div className={styles.grid}>
@@ -133,7 +129,6 @@ export default function LogMetric() {
           </div>
         </div>
 
-        {/* Water with quick buttons */}
         <div className={styles.section}>
           <label className={styles.sectionLabel}>Water Intake</label>
           <div className={styles.waterRow}>
@@ -149,7 +144,6 @@ export default function LogMetric() {
           </div>
         </div>
 
-        {/* Meal Logger */}
         <div className={styles.section}>
           <label className={styles.sectionLabel}>Meals (auto-sums to calories consumed)</label>
           <div className={styles.grid}>
@@ -168,7 +162,6 @@ export default function LogMetric() {
           </div>
         </div>
 
-        {/* Exercise Log */}
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
             <label className={styles.sectionLabel}>Exercise Log (auto-sums calories burned)</label>
@@ -200,7 +193,6 @@ export default function LogMetric() {
           )}
         </div>
 
-        {/* Mood */}
         <div className={styles.section}>
           <label className={styles.sectionLabel}>How do you feel today?</label>
           <div className={styles.moodGrid}>
@@ -213,7 +205,6 @@ export default function LogMetric() {
           </div>
         </div>
 
-        {/* Notes */}
         <div className={styles.section}>
           <label className={styles.sectionLabel}>Notes (optional)</label>
           <textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={3} placeholder="How was your day? Any health notes..." className={styles.textarea} />

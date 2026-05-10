@@ -53,8 +53,13 @@ export default function Profile() {
   };
 
   const bmi = form.weight && form.height ? (Number(form.weight) / Math.pow(Number(form.height) / 100, 2)).toFixed(1) : null;
-  const bmiLabel = bmi ? (bmi < 18.5 ? 'Underweight' : bmi < 25 ? 'Normal' : bmi < 30 ? 'Overweight' : 'Obese') : null;
-  const bmiColor = bmi ? (bmi < 18.5 ? '#06b6d4' : bmi < 25 ? '#10b981' : bmi < 30 ? '#f59e0b' : '#ef4444') : null;
+  const bmiCategory = (b) => {
+    if (b < 18.5) return { label: 'Underweight', color: '#06b6d4' };
+    if (b < 25)   return { label: 'Normal',      color: '#10b981' };
+    if (b < 30)   return { label: 'Overweight',  color: '#f59e0b' };
+    return               { label: 'Obese',        color: '#ef4444' };
+  };
+  const { label: bmiLabel, color: bmiColor } = bmi ? bmiCategory(Number(bmi)) : {};
 
   return (
     <div className={styles.page}>
